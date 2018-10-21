@@ -6,38 +6,13 @@ from collections import Counter
 import numpy as np
 import tensorflow.contrib.keras as kr
 
-if sys.version_info[0] > 2:
-    is_py3 = True
-else:
-    reload(sys)
-    sys.setdefaultencoding("utf-8")
-    is_py3 = False
-
-
-def native_word(word, encoding='utf-8'):
-    """如果在python2下面使用python3训练的模型，可考虑调用此函数转化一下字符编码"""
-    if not is_py3:
-        return word.encode(encoding)
-    else:
-        return word
-
-
-def native_content(content):
-    if not is_py3:
-        return content.decode('utf-8')
-    else:
-        return content
-
 
 def open_file(filename, mode='r'):
     """
     常用文件操作，可在python2和python3间切换.
     mode: 'r' or 'w' for read or write
     """
-    if is_py3:
-        return open(filename, mode, encoding='utf-8', errors='ignore')
-    else:
-        return open(filename, mode)
+    return open(filename, mode, encoding='utf-8', errors='ignore')
 
 
 def read_file(filename):
@@ -46,10 +21,10 @@ def read_file(filename):
     with open_file(filename) as f:
         for line in f:
             try:
-                label, content = line.strip().split('\t')
+                label, content = line.strip().split(',', 1)
                 if content:
-                    contents.append(list(native_content(content)))
-                    labels.append(native_content(label))
+                    contents.append(list(content))
+                    labels.append(label)
             except:
                 pass
     return contents, labels
@@ -76,7 +51,7 @@ def read_vocab(vocab_dir):
     # words = open_file(vocab_dir).read().strip().split('\n')
     with open_file(vocab_dir) as fp:
         # 如果是py2 则每个值都转化为unicode
-        words = [native_content(_.strip()) for _ in fp.readlines()]
+        words = [_.strip() for _ in fp.readlines()]
     word_to_id = dict(zip(words, range(len(words))))
     return words, word_to_id
 
@@ -84,8 +59,9 @@ def read_vocab(vocab_dir):
 def read_category():
     """读取分类目录，固定"""
     categories = ['体育', '财经', '房产', '家居', '教育', '科技', '时尚', '时政', '游戏', '娱乐']
+    categories = ['greeting', 'goods', 'interact']
 
-    categories = [native_content(x) for x in categories]
+    categories = [x for x in categories]
 
     cat_to_id = dict(zip(categories, range(len(categories))))
 
