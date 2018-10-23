@@ -1,6 +1,5 @@
+#!/data/pyenv/taokit/bin/python
 # coding: utf-8
-
-from __future__ import print_function
 
 import os
 import tensorflow as tf
@@ -9,12 +8,7 @@ import tensorflow.contrib.keras as kr
 from cnn_model import TCNNConfig, TextCNN
 from data.cnews_loader import read_category, read_vocab
 
-try:
-    bool(type(unicode))
-except NameError:
-    unicode = str
-
-base_dir = 'data/comments'
+base_dir = os.path.join(os.path.dirname(__file__), 'data/comments')
 vocab_dir = os.path.join(base_dir, 'vocab.txt')
 
 save_dir = 'checkpoints/textcnn'
@@ -35,8 +29,7 @@ class CnnModel:
         saver.restore(sess=self.session, save_path=save_path)  # 读取保存的模型
 
     def predict(self, message):
-        # 支持不论在python2还是python3下训练的模型都可以在2或者3的环境下运行
-        content = unicode(message)
+        content = message
         data = [self.word_to_id[x] for x in content if x in self.word_to_id]
 
         feed_dict = {
@@ -48,9 +41,21 @@ class CnnModel:
         return self.categories[y_pred_cls[0]]
 
 
+def test(samples_file: str = os.path.join(base_dir, 'test.txt')):
+    model = CnnModel()
+    total = cor = err = 0
+    for sample in open(samples_file):
+        label, content = sample.rstrip().split(',', 1)
+        pred_label = model.predict(content)
+        total += 1
+        if label != pred_label:
+            err += 1
+        else:
+            cor += 1
+    print('total: {}, correct: {} as {:>.2f}%, error: {} as {:>.2f}%'.format(total, cor, (cor * 100) / total, err, (err * 100) / total))
+
+
 if __name__ == '__main__':
-    cnn_model = CnnModel()
-    test_demo = ['三星ST550以全新的拍摄方式超越了以往任何一款数码相机',
-                 '热火vs骑士前瞻：皇帝回乡二番战 东部次席唾手可得新浪体育讯北京时间3月30日7:00']
-    for i in test_demo:
-        print(cnn_model.predict(i))
+    samples_file = os.path.join(base_dir, 'test.txt')
+    print('samples file: {}'.format(samples_file))
+    test(samples_file)
