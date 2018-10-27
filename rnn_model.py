@@ -1,7 +1,8 @@
-#!/usr/bin/python
+#!/opt/miniconda/bin/python
 # -*- coding: utf-8 -*-
 
 import tensorflow as tf
+
 
 class TRNNConfig(object):
     """RNN配置参数"""

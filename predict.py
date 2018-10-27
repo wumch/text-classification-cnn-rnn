@@ -1,4 +1,4 @@
-#!/data/pyenv/taokit/bin/python
+#!/opt/miniconda/bin/python
 # coding: utf-8
 
 import os
