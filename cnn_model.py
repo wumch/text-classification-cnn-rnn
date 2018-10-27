@@ -6,7 +6,7 @@ import tensorflow as tf
 class TCNNConfig(object):
     """CNN配置参数"""
 
-    embedding_dim = 32  # 词向量维度
+    embedding_dim = 128  # 词向量维度
     seq_length = 600  # 序列长度
     num_classes = 3  # 类别数
     num_filters = 256  # 卷积核数目
