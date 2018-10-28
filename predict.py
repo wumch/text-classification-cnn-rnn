@@ -16,6 +16,7 @@ save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保�
 
 
 class CnnModel:
+
     def __init__(self):
         self.config = TCNNConfig()
         self.categories, self.cat_to_id = read_category()
