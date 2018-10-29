@@ -6,6 +6,7 @@ from __future__ import print_function
 import os
 import sys
 import time
+import math
 from datetime import timedelta
 
 import numpy as np
@@ -157,7 +158,7 @@ def test():
 
     batch_size = 128
     data_len = len(x_test)
-    num_batch = int((data_len - 1) / batch_size) + 1
+    num_batch = int(math.ceil((data_len - 1) / batch_size))
 
     y_test_cls = np.argmax(y_test, 1)
     y_pred_cls = np.zeros(shape=len(x_test), dtype=np.int32)  # 保存预测结果
@@ -170,9 +171,14 @@ def test():
         }
         y_pred_cls[start_id:end_id] = session.run(model.y_pred_cls, feed_dict=feed_dict)
 
+    for i in range(len(x_test)):
+        print(f'{y_pred_cls[i]} => {x_test[i]}')
+
     # 评估
     print("Precision, Recall and F1-Score...")
     print(metrics.classification_report(y_test_cls, y_pred_cls, target_names=categories))
+
+
 
     # 混淆矩阵
     print("Confusion Matrix...")

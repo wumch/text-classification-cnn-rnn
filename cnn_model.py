@@ -10,7 +10,7 @@ class TCNNConfig:
     seq_length = 600  # 序列长度
     num_classes = 3  # 类别数
     num_filters = 256  # 卷积核数目
-    kernel_size = 4  # 卷积核尺寸
+    kernel_size = 5  # 卷积核尺寸
     vocab_size = 5000  # 词汇表达小
 
     hidden_dim = 32  # 全连接层神经元
@@ -18,7 +18,7 @@ class TCNNConfig:
     dropout_keep_prob = 0.5  # dropout保留比例
     learning_rate = 1e-4  # 学习率
 
-    batch_size = 64  # 每批训练大小
+    batch_size = 128  # 每批训练大小
     num_epochs = 30  # 总迭代轮次
 
     print_per_batch = 10  # 每多少轮输出一次结果
@@ -43,6 +43,7 @@ class TextCNN(object):
         """CNN模型"""
         # 词向量映射
         with tf.device('/cpu:0'):
+            # embedding = tf.get_variable('embedding', [self.config.vocab_size, self.config.embedding_dim])
             embedding = tf.get_variable('embedding', shape=[self.config.vocab_size, self.config.embedding_dim], initializer=tf.constant_initializer(self.emodel.vectors), trainable=False)
             embedding_inputs = tf.nn.embedding_lookup(embedding, self.input_x)
 

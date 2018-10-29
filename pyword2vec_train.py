@@ -24,11 +24,15 @@ class Train:
             self.vocab_all = None
         self.save_vocab = os.path.join(self.data_dir, 'vocab.txt')
         self.embedding_dim = 128
-        self.skip_window = 2
+        self.skip_window = 3
         self.min_tf = 3
         self.cbow = True
         self.respace = re.compile('\s+')
+        self.pad = '<PAD>'
+        self.pad_list = [self.pad] * self.skip_window
         jieba.load_userdict(self.extra_dict)
+        self.seg_chars = True
+        self.seg_words = True
 
     def run(self):
         self._seg_file()
@@ -57,7 +61,18 @@ class Train:
     def seg(self, text: str) -> List[str]:
         text = text.replace('　', ' ')  # 空格 全角转半角
         text = self.respace.sub(' ', text).strip()
-        return list(jieba.cut(text, cut_all=False)) if text else []
+        seq = []
+        if self.seg_chars:
+            if seq:
+                seq.extend(self.pad_list)
+            seq.extend(list(text))
+        if self.seg_words:
+            if seq:
+                seq.extend(self.pad_list)
+            seq.extend(list(jieba.cut(text, cut_all=False)) if text else [])
+        if seq:
+            seq.extend(self.pad_list)
+        return seq
 
 
 if __name__ == '__main__':

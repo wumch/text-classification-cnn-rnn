@@ -1,5 +1,6 @@
 
 import tensorflow as tf
+import word2vec
 import numpy as np
 
 
@@ -9,8 +10,9 @@ class TextCNN(object):
     Uses an embedding layer, followed by a convolutional, max-pooling and softmax layer.
     """
     def __init__(
-        self, sequence_length, num_classes, vocab_size,
-        embedding_size, filter_sizes, num_filters, l2_reg_lambda=0.0):
+        self, sequence_length, num_classes, embedding_model: word2vec.WordVectors, filter_sizes, num_filters, l2_reg_lambda=0.0):
+
+        vocab_size, embedding_size = embedding_model.vectors.shape[1]
 
         # Placeholders for input, output and dropout
         self.input_x = tf.placeholder(tf.int32, [None, sequence_length], name="input_x")
