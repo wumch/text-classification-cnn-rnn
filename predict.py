@@ -37,8 +37,7 @@ class CnnModel:
         saver = tf.train.Saver()
         saver.restore(sess=self.session, save_path=save_path)  # 读取保存的模型
 
-    def predict(self, message):
-        content = message
+    def predict(self, content):
         data = [self.word_to_id[x] for x in self.segor.seg(content) if x in self.word_to_id]
 
         input_x = kr.preprocessing.sequence.pad_sequences([data], self.config.seq_length)

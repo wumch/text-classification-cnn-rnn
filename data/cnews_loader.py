@@ -26,7 +26,7 @@ def read_file(filename):
             try:
                 label, content = line.strip().split(',', 1)
                 if content:
-                    contents.append(segor.seg(line))
+                    contents.append(segor.seg(content))
                     labels.append(label)
             except:
                 pass

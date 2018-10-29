@@ -171,9 +171,6 @@ def test():
         }
         y_pred_cls[start_id:end_id] = session.run(model.y_pred_cls, feed_dict=feed_dict)
 
-    for i in range(len(x_test)):
-        print(f'{y_pred_cls[i]} => {x_test[i]}')
-
     # 评估
     print("Precision, Recall and F1-Score...")
     print(metrics.classification_report(y_test_cls, y_pred_cls, target_names=categories))

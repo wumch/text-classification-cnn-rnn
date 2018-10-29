@@ -19,7 +19,7 @@ class TCNNConfig:
     learning_rate = 1e-4  # 学习率
 
     batch_size = 128  # 每批训练大小
-    num_epochs = 30  # 总迭代轮次
+    num_epochs = 50  # 总迭代轮次
 
     print_per_batch = 10  # 每多少轮输出一次结果
     save_per_batch = 10  # 每多少轮存入tensorboard
@@ -65,7 +65,7 @@ class TextCNN(object):
 
         with tf.name_scope("optimize"):
             # 损失函数，交叉熵
-            cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=self.logits, labels=self.input_y)
+            cross_entropy = tf.nn.softmax_cross_entropy_with_logits_v2(logits=self.logits, labels=self.input_y)
             self.loss = tf.reduce_mean(cross_entropy)
             # 优化器
             self.optim = tf.train.AdamOptimizer(learning_rate=self.config.learning_rate).minimize(self.loss)
