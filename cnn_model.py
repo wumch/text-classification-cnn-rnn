@@ -49,18 +49,18 @@ class TextCNN(object):
 
         with tf.name_scope("cnn"):
             # CNN layer
-            conv = tf.layers.conv1d(embedding_inputs, self.config.num_filters, self.config.kernel_size, name='conv')
+            conv = tf.layers.conv1d(embedding_inputs, self.config.num_filters, self.config.kernel_size, name='conv', activation='relu')
             # global max pooling layer
             gmp = tf.reduce_max(conv, reduction_indices=[1], name='gmp')
 
         with tf.name_scope("score"):
             # 全连接层，后面接dropout以及relu激活
-            fc = tf.layers.dense(gmp, self.config.hidden_dim, name='fc1')
+            fc = tf.layers.dense(gmp, self.config.hidden_dim, name='fc1', activation='relu')
             fc = tf.contrib.layers.dropout(fc, self.keep_prob)
             fc = tf.nn.relu(fc)
 
             # 分类器
-            self.logits = tf.layers.dense(fc, self.config.num_classes, name='fc2')
+            self.logits = tf.layers.dense(fc, self.config.num_classes, name='fc2', activation='relu')
             self.y_pred_cls = tf.argmax(tf.nn.softmax(self.logits), 1)  # 预测类别
 
         with tf.name_scope("optimize"):
