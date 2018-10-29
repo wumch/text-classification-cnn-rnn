@@ -3,7 +3,7 @@
 import tensorflow as tf
 
 
-class TCNNConfig(object):
+class TCNNConfig:
     """CNN配置参数"""
 
     embedding_dim = 128  # 词向量维度
@@ -30,6 +30,7 @@ class TextCNN(object):
 
     def __init__(self, config):
         self.config = config
+        tf.nn.nce_loss
 
         # 三个待输入的数据
         self.input_x = tf.placeholder(tf.int32, [None, self.config.seq_length], name='input_x')
