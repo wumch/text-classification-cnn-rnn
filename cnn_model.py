@@ -28,9 +28,9 @@ class TCNNConfig:
 class TextCNN(object):
     """文本分类，CNN模型"""
 
-    def __init__(self, config):
-        self.config = config
-        tf.nn.nce_loss
+    def __init__(self, config, embedding_model):
+        self.config = config  # type: TCNNConfig
+        self.emodel = embedding_model
 
         # 三个待输入的数据
         self.input_x = tf.placeholder(tf.int32, [None, self.config.seq_length], name='input_x')
@@ -43,7 +43,7 @@ class TextCNN(object):
         """CNN模型"""
         # 词向量映射
         with tf.device('/cpu:0'):
-            embedding = tf.get_variable('embedding', [self.config.vocab_size, self.config.embedding_dim])
+            embedding = tf.get_variable('embedding', shape=[self.config.vocab_size, self.config.embedding_dim], initializer=tf.constant_initializer(self.emodel.vectors), trainable=False)
             embedding_inputs = tf.nn.embedding_lookup(embedding, self.input_x)
 
         with tf.name_scope("cnn"):
