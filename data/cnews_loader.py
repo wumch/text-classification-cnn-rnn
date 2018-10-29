@@ -5,6 +5,9 @@ from collections import Counter
 
 import numpy as np
 import tensorflow.contrib.keras as kr
+from pyword2vec_train import Train
+
+segor = Train()
 
 
 def open_file(filename, mode='r'):
@@ -23,7 +26,7 @@ def read_file(filename):
             try:
                 label, content = line.strip().split(',', 1)
                 if content:
-                    contents.append(list(content))
+                    contents.append(segor.seg(line))
                     labels.append(label)
             except:
                 pass

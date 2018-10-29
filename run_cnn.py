@@ -14,7 +14,7 @@ from sklearn import metrics
 import word2vec
 
 from cnn_model import TCNNConfig, TextCNN
-from data.cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
+from data.cnews_loader import read_category, batch_iter, process_file, build_vocab
 
 base_dir = 'data/comments'
 train_dir = os.path.join(base_dir, 'train.txt')
@@ -193,7 +193,6 @@ if __name__ == '__main__':
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
         build_vocab(train_dir, vocab_dir, config.vocab_size)
     categories, cat_to_id = read_category()
-    # words, word_to_id = read_vocab(vocab_dir)
     words = list(embedding_model.vocab)
     word_to_id = embedding_model.vocab_hash
     config.vocab_size = len(words)
