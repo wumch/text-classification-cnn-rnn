@@ -3,3 +3,4 @@ scipy
 numpy
 tensorflow
 jieba
+word2vec

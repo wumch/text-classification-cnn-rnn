@@ -4,9 +4,10 @@
 import os
 import tensorflow as tf
 import tensorflow.contrib.keras as kr
-
+import word2vec
 from cnn_model import TCNNConfig, TextCNN
-from data.cnews_loader import read_category, read_vocab
+from data.cnews_loader import read_category
+from pyword2vec_train import Train
 
 base_dir = os.path.join(os.path.dirname(__file__), 'data/comments')
 vocab_dir = os.path.join(base_dir, 'vocab.txt')
@@ -18,23 +19,30 @@ save_path = os.path.join(save_dir, 'best_validation')  # 最佳验证结果保�
 class CnnModel:
 
     def __init__(self):
+        embedding_model_file = os.path.join('data', 'word_embedding', 'embeddings.bin')
+        embedding_model = word2vec.load(embedding_model_file)
+        self.segor = Train()
+
         self.config = TCNNConfig()
         self.categories, self.cat_to_id = read_category()
-        self.words, self.word_to_id = read_vocab(vocab_dir)
-        self.config.vocab_size = len(self.words)
-        self.model = TextCNN(self.config)
+        words = list(embedding_model.vocab)
+        self.word_to_id = embedding_model.vocab_hash
+        self.config.vocab_size = len(words)
+        # self.words, self.word_to_id = read_vocab(vocab_dir)
+        # self.config.vocab_size = len(self.words)
+        self.model = TextCNN(self.config, embedding_model)
 
         self.session = tf.Session()
         self.session.run(tf.global_variables_initializer())
         saver = tf.train.Saver()
         saver.restore(sess=self.session, save_path=save_path)  # 读取保存的模型
 
-    def predict(self, message):
-        content = message
-        data = [self.word_to_id[x] for x in content if x in self.word_to_id]
+    def predict(self, content):
+        data = [self.word_to_id[x] for x in self.segor.seg(content) if x in self.word_to_id]
 
+        input_x = kr.preprocessing.sequence.pad_sequences([data], self.config.seq_length)
         feed_dict = {
-            self.model.input_x: kr.preprocessing.sequence.pad_sequences([data], self.config.seq_length),
+            self.model.input_x: input_x,
             self.model.keep_prob: 1.0
         }
 

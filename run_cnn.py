@@ -6,6 +6,7 @@ from __future__ import print_function
 import os
 import sys
 import time
+import math
 from datetime import timedelta
 
 import numpy as np
@@ -14,7 +15,7 @@ from sklearn import metrics
 import word2vec
 
 from cnn_model import TCNNConfig, TextCNN
-from data.cnews_loader import read_vocab, read_category, batch_iter, process_file, build_vocab
+from data.cnews_loader import read_category, batch_iter, process_file, build_vocab
 
 base_dir = 'data/comments'
 train_dir = os.path.join(base_dir, 'train.txt')
@@ -157,7 +158,7 @@ def test():
 
     batch_size = 128
     data_len = len(x_test)
-    num_batch = int((data_len - 1) / batch_size) + 1
+    num_batch = int(math.ceil((data_len - 1) / batch_size))
 
     y_test_cls = np.argmax(y_test, 1)
     y_pred_cls = np.zeros(shape=len(x_test), dtype=np.int32)  # 保存预测结果
@@ -173,6 +174,8 @@ def test():
     # 评估
     print("Precision, Recall and F1-Score...")
     print(metrics.classification_report(y_test_cls, y_pred_cls, target_names=categories))
+
+
 
     # 混淆矩阵
     print("Confusion Matrix...")
@@ -193,7 +196,6 @@ if __name__ == '__main__':
     if not os.path.exists(vocab_dir):  # 如果不存在词汇表，重建
         build_vocab(train_dir, vocab_dir, config.vocab_size)
     categories, cat_to_id = read_category()
-    # words, word_to_id = read_vocab(vocab_dir)
     words = list(embedding_model.vocab)
     word_to_id = embedding_model.vocab_hash
     config.vocab_size = len(words)
