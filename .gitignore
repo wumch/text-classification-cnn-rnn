@@ -6,4 +6,8 @@ cnn_keras.py
 .idea
 *.pyc
 checkpoints
-tensorboard
+/tensorboard
+/data/word_embedding/all.seged.txt
+/data/word_embedding/embeddings.bin
+/data/word_embedding/vocab.txt
+
