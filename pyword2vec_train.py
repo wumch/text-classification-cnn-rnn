@@ -24,9 +24,9 @@ class Train:
             self.vocab_all = None
         self.save_vocab = os.path.join(self.data_dir, 'vocab.txt')
         self.embedding_dim = 128
-        self.skip_window = 3
+        self.skip_window = 5
         self.min_tf = 3
-        self.cbow = True
+        self.cbow = False
         self.respace = re.compile('\s+')
         self.pad = '<PAD>'
         self.pad_list = [self.pad] * self.skip_window
