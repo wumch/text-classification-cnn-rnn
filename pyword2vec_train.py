@@ -23,7 +23,7 @@ class Train:
         if not os.path.exists(self.vocab_all):
             self.vocab_all = None
         self.save_vocab = os.path.join(self.data_dir, 'vocab.txt')
-        self.embedding_dim = 128
+        self.embedding_dim = 256
         self.skip_window = 5
         self.min_tf = 3
         self.cbow = False

@@ -20,6 +20,7 @@ from data.cnews_loader import read_category, batch_iter, process_file, build_voc
 base_dir = 'data/comments'
 train_dir = os.path.join(base_dir, 'train.txt')
 test_dir = os.path.join(base_dir, 'test.txt')
+# test_dir = os.path.join(base_dir, 'revised.txt')
 val_dir = os.path.join(base_dir, 'val.txt')
 vocab_dir = os.path.join(base_dir, 'vocab.txt')
 embedding_model_file = os.path.join('data', 'word_embedding', 'embeddings.bin')
@@ -47,7 +48,7 @@ def feed_data(x_batch, y_batch, keep_prob):
 def evaluate(sess, x_, y_):
     """评估在某一数据上的准确率和损失"""
     data_len = len(x_)
-    batch_eval = batch_iter(x_, y_, 128)
+    batch_eval = batch_iter(x_, y_, 256)
     total_loss = 0.0
     total_acc = 0.0
     for x_batch, y_batch in batch_eval:
@@ -156,7 +157,7 @@ def test():
     msg = 'Test Loss: {0:>6.2}, Test Acc: {1:>7.2%}'
     print(msg.format(loss_test, acc_test))
 
-    batch_size = 128
+    batch_size = 256
     data_len = len(x_test)
     num_batch = int(math.ceil((data_len - 1) / batch_size))
 

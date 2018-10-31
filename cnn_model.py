@@ -6,20 +6,20 @@ import tensorflow as tf
 class TCNNConfig:
     """CNN配置参数"""
 
-    embedding_dim = 128  # 词向量维度
-    seq_length = 600  # 序列长度
+    embedding_dim = 256  # 词向量维度
+    seq_length = 900  # 序列长度
     num_classes = 3  # 类别数
     num_filters = 256  # 卷积核数目
-    kernel_size = 5  # 卷积核尺寸
+    kernel_size = 7  # 卷积核尺寸
     vocab_size = 5000  # 词汇表达小
 
     hidden_dim = 32  # 全连接层神经元
 
-    dropout_keep_prob = 0.5  # dropout保留比例
-    learning_rate = 1e-4  # 学习率
+    dropout_keep_prob = 0.2  # dropout保留比例
+    learning_rate = 4e-5  # 学习率
 
-    batch_size = 128  # 每批训练大小
-    num_epochs = 70  # 总迭代轮次
+    batch_size = 256  # 每批训练大小
+    num_epochs = 2000  # 总迭代轮次
 
     print_per_batch = 10  # 每多少轮输出一次结果
     save_per_batch = 10  # 每多少轮存入tensorboard
