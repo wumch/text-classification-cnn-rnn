@@ -14,14 +14,29 @@ import tensorflow as tf
 from sklearn import metrics
 import word2vec
 
-from cnn_model import TCNNConfig, TextCNN
+from cnn_model import TCNNConfig, TextCNN, batch_size
 from data.cnews_loader import read_category, batch_iter, process_file, build_vocab
 
+
 base_dir = 'data/comments'
-train_dir = os.path.join(base_dir, 'train.txt')
-test_dir = os.path.join(base_dir, 'test.txt')
+
+# train_dir = os.path.join(base_dir, 'train.txt')
+# val_dir = os.path.join(base_dir, 'val.txt')
+# test_dir = os.path.join(base_dir, 'test.txt')
+
+train_dir = os.path.join(base_dir, 'mix-train.txt')
+val_dir = os.path.join(base_dir, 'mix-val.txt')
+test_dir = os.path.join(base_dir, 'mix-test.txt')
+test_dir = os.path.join(base_dir, 'mix-test-revised.txt')
+# test_dir = os.path.join(base_dir, 'mix-test-non-revised.txt')
+
+train_dir = os.path.join(base_dir, 'non-revised-train.txt')
+val_dir = os.path.join(base_dir, 'non-revised-val.txt')
+test_dir = os.path.join(base_dir, 'non-revised-test.txt')
+
+# test_dir = os.path.join(base_dir, 'non-revised-test.txt')
 # test_dir = os.path.join(base_dir, 'revised.txt')
-val_dir = os.path.join(base_dir, 'val.txt')
+
 vocab_dir = os.path.join(base_dir, 'vocab.txt')
 embedding_model_file = os.path.join('data', 'word_embedding', 'embeddings.bin')
 
@@ -48,7 +63,7 @@ def feed_data(x_batch, y_batch, keep_prob):
 def evaluate(sess, x_, y_):
     """评估在某一数据上的准确率和损失"""
     data_len = len(x_)
-    batch_eval = batch_iter(x_, y_, 256)
+    batch_eval = batch_iter(x_, y_, batch_size)
     total_loss = 0.0
     total_acc = 0.0
     for x_batch, y_batch in batch_eval:
@@ -96,7 +111,7 @@ def train():
     total_batch = 0  # 总批次
     best_acc_val = 0.0  # 最佳验证集准确率
     last_improved = 0  # 记录上一次提升批次
-    require_improvement = 1000  # 如果超过1000轮未提升，提前结束训练
+    require_improvement = 3000  # 如果超过1000轮未提升，提前结束训练
 
     flag = False
     for epoch in range(config.num_epochs):
@@ -157,7 +172,6 @@ def test():
     msg = 'Test Loss: {0:>6.2}, Test Acc: {1:>7.2%}'
     print(msg.format(loss_test, acc_test))
 
-    batch_size = 256
     data_len = len(x_test)
     num_batch = int(math.ceil((data_len - 1) / batch_size))
 
