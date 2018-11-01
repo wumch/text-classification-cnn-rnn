@@ -28,7 +28,7 @@ train_dir = os.path.join(base_dir, 'mix-train.txt')
 val_dir = os.path.join(base_dir, 'mix-val.txt')
 test_dir = os.path.join(base_dir, 'mix-test.txt')
 test_dir = os.path.join(base_dir, 'mix-test-revised.txt')
-# test_dir = os.path.join(base_dir, 'mix-test-non-revised.txt')
+test_dir = os.path.join(base_dir, 'mix-test-non-revised.txt')
 
 train_dir = os.path.join(base_dir, 'non-revised-train.txt')
 val_dir = os.path.join(base_dir, 'non-revised-val.txt')
