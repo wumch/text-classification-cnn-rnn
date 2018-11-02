@@ -22,7 +22,7 @@ class CnnModel:
     def __init__(self):
         embedding_model_file = os.path.join(
             'data', 'word_embedding', 'embeddings.bin')
-        embedding_model = word2vec.load(embedding_model_file)
+        embedding_model = word2vec.load(embedding_model_file)  # type: word2vec.WordVectors
         self.segor = Train()
 
         self.config = TCNNConfig()
