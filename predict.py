@@ -30,8 +30,6 @@ class CnnModel:
         words = list(embedding_model.vocab)
         self.word_to_id = embedding_model.vocab_hash
         self.config.vocab_size = len(words)
-        # self.words, self.word_to_id = read_vocab(vocab_dir)
-        # self.config.vocab_size = len(self.words)
         self.model = TextCNN(self.config, embedding_model)
 
         self.session = tf.Session()
